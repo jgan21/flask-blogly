@@ -58,19 +58,19 @@ def create_user():
 
     return redirect('/users')
 
-@app.get("/user/<int:user_id>")
+@app.get("/users/<int:user_id>")
 def show_user_info(user_id):
     """Show info on a single user."""
 
     user = User.query.get_or_404(user_id)
     return render_template("user-info.html", user=user)
 
-@app.get("/user/<int:user_id>/edit")
+@app.get("/users/<int:user_id>/edit")
 def show_edit_form(user_id):
     """Show the edit form with user's information in inputs."""
 
     user = User.query.get(user_id)
-    return render_template("???", user=user)
+    return render_template("edit.html", user=user)
 
 
 

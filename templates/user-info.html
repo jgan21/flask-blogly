@@ -5,7 +5,13 @@
 
 <h1> {{ user.first_name }} {{ user.last_name}} </h1>
 
-<button>Edit</button>
-<button>Delete</button>
+
+<form action="/users/{{ user.id }}/edit" method="GET">
+    <button>Edit</button>
+</form>
+
+<form action="/users/{{ user.id }}/delete" method="POST">
+    <button>Delete</button>
+</form>
 
 {% endblock %}

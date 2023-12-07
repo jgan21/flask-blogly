@@ -4,21 +4,26 @@
 <h1>Edit a user</h1>
 <form action="???" method="POST">
   <p>First Name
-      <input type="text" placeholder="Pippa" name="first_name">
+      <input type="text" name="first_name" value="{{ user.first_name }}">
   </p>
   <p>
   Last Name
-      <input type="text" placeholder="The Cat" name="last_name">
+      <input type="text" name="last_name" value="{{ user.last_name }}">
   </p>
   <p>
   Image URL
-      <input type="url" placeholder="https://example.com/image.jpg" name="image_url">
+      <input type="url" name="image_url" value="{{ user.image_url }}">
   </p>
   <p>
-      <button>Cancel</button>
-      <button>Add</button>
+
+
+      <button type="submit">Save</button>
   </p>
 
+</form>
+
+<form action="/users/{{ user.id }}" method="GET">
+    <button>Cancel</button>
 </form>
 
 {% endblock %}
