@@ -18,7 +18,14 @@ connect_db(app)
 app.config['SECRET_KEY'] = "SECRET!"
 debug = DebugToolbarExtension(app)
 
+
 @app.get("/")
+def homepage():
+    """Show homepage with current list of user """
+
+    return redirect("/users")
+
+@app.get("/users")
 def list_users():
     """List users' first and last name on the page"""
 
@@ -26,11 +33,12 @@ def list_users():
     return render_template("list.html", users=users)
 
 
-
 @app.get("/users/new")
 def show_new_user_form():
     """ Show new user form. """
+
     return render_template('new-user.html')
+
 
 @app.post("/users/new")
 def create_user():
@@ -48,4 +56,21 @@ def create_user():
     db.session.add(new_person)
     db.session.commit()
 
-    return redirect('/')
+    return redirect('/users')
+
+@app.get("/user/<int:user_id>")
+def show_user_info(user_id):
+    """Show info on a single user."""
+
+    user = User.query.get_or_404(user_id)
+    return render_template("user-info.html", user=user)
+
+@app.get("/user/<int:user_id>/edit")
+def show_edit_form(user_id):
+    """Show the edit form with user's information in inputs."""
+
+    user = User.query.get(user_id)
+    return render_template("???", user=user)
+
+
+
