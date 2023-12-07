@@ -70,3 +70,23 @@ class UserViewTestCase(TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertIn("Create a user", html)
 
+
+    def test_create_user(self):
+        with app.test_client() as c:
+            resp = c.post('/users/new',
+                           data={'first_name': 'test2_first',
+                                  'last_name': 'test2_last',
+                                  'image_url': 'None'}, follow_redirects=True)
+
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertEqual('test2_first', User.query.filter(
+                User.first_name == 'test2_first').one().first_name)
+
+
+
+
+
+
+
+
