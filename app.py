@@ -1,4 +1,5 @@
 """Blogly application."""
+print("***** APP.PY   ")
 
 import os
 
