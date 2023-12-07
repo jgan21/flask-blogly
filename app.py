@@ -2,7 +2,7 @@
 
 import os
 
-from flask import Flask, request, redirect, render_template
+from flask import Flask, request, redirect, render_template, flash
 from flask_debugtoolbar import DebugToolbarExtension
 
 from models import db, connect_db, User
@@ -90,6 +90,20 @@ def handle_edit_form(user_id):
     db.session.add(user)
     db.session.commit()
 
+    return redirect('/users')
+
+
+@app.post("/users/<int:user_id>/delete")
+def delete_user(user_id):
+    """ Delete a user from the users table and from the homepage list.
+    This function is primarily accessed via the user form at users/#/edit. """
+
+    user = User.query.get(user_id)
+
+    db.session.delete(user)
+    db.session.commit()
+
+    flash(f"User {user.first_name} {user.last_name} has been terminated.")
     return redirect('/users')
 
 

@@ -5,12 +5,16 @@
   <meta name="viewport"
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>{% block title %}TITLE HERE{% endblock %}</title>
+  <title>{% block title %}Blogly{% endblock %}</title>
   <link rel="stylesheet" href="/static/pretty.css">
 </head>
 <body>
 <header>Blogly</header>
 <main>
+
+  {% for msg in get_flashed_messages() %}
+  <h4> {{ msg }}</h4>
+  {% endfor %}
   {% block content %}CONTENT HERE{% endblock %}
 </main>
 <footer>Copyright by Blogly</footer>
