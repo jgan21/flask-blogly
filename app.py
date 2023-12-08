@@ -113,3 +113,13 @@ def delete_user(user_id):
 
     flash(f"User {user.first_name} {user.last_name} has been terminated.")
     return redirect('/users')
+
+
+
+@app.get("/users/<int:user_id>/posts/new")
+def show_new_post_form(user_id):
+    """ Show the new post form specific to one user. """
+
+    user = User.query.get_or_404(user_id)
+    return render_template("new-post.html", user=user)
+

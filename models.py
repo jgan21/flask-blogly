@@ -72,3 +72,9 @@ class Post(db.Model):
         nullable=False,
         default=ctime()
     )
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('users.id'),
+        nullable=False
+    )

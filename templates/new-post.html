@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Write your heart out, {{ user.first_name }}</h1>
+
+    <form action="/users/{{ user.id }}/posts/new" method="POST">
+        Title
+            <input type="text" name="post_title">
+        </p>
+        <p>
+        Content
+            <input type="textarea" name="post_content">
+        </p>
+        <p>
+            <button>Post</button>
+        </p>
+
+    </form>
+{% endblock %}
