@@ -22,15 +22,17 @@ debug = DebugToolbarExtension(app)
 
 @app.get("/")
 def homepage():
-    """Show homepage with current list of user """
+    """ Show homepage with current list of users. """ # Change docstring
+    # -- we are not actually doing that here. (It's done in list_users())
 
     return redirect("/users")
 
 @app.get("/users")
 def list_users():
-    """List users' first and last name on the page"""
+    """ List users' first and last name on the page. """
 
-    users = User.query.all()
+    users = User.query.all()    # Might be returned unsorted!
+                                # Look into ORDER BY: alphabetical? by recency?
     return render_template("list.html", users=users)
 
 
@@ -43,21 +45,23 @@ def show_new_user_form():
 
 @app.post("/users/new")
 def create_user():
+    """ Create a new user with the inputs from the form. """
 
     first_name = request.form['first_name']
     last_name = request.form['last_name']
     image_url = request.form['image_url'] if request.form['image_url'] else None
 
-    new_person = User(
+    new_user = User(
         first_name=first_name,
         last_name=last_name,
         image_url=image_url
-        )
+    )
 
-    db.session.add(new_person)
+    db.session.add(new_user)
     db.session.commit()
 
     return redirect('/users')
+
 
 @app.get("/users/<int:user_id>")
 def show_user_info(user_id):
@@ -66,14 +70,17 @@ def show_user_info(user_id):
     user = User.query.get_or_404(user_id)
     return render_template("user-info.html", user=user)
 
+
 @app.get("/users/<int:user_id>/edit")
 def show_edit_form(user_id):
-    """Show the edit form with user's information in inputs."""
+    """Show the edit form with user's information in inputs.""" # Nice, explicit
 
-    user = User.query.get(user_id)
+    # use get_or_404 for this instead!
+    user = User.query.get(user_id)  # Why is this not erroring for u = 999? TODO
     return render_template("edit.html", user=user)
 
-@app.post("/users/<int:user_id>/edit")
+
+@app.post("/users/<int:user_id>/edit")   # Needs to 404 for DNE user
 def handle_edit_form(user_id):
     """Retrieve information from inputs, update the database,
     and redirect user back to /users page"""
@@ -83,6 +90,7 @@ def handle_edit_form(user_id):
     first_name = request.form['first_name']
     last_name = request.form['last_name']
     image_url = request.form['image_url'] if request.form['image_url'] else None
+    # Should be equal to the default image string in the "" condition
 
     user.first_name = first_name
     user.last_name = last_name
@@ -106,10 +114,3 @@ def delete_user(user_id):
 
     flash(f"User {user.first_name} {user.last_name} has been terminated.")
     return redirect('/users')
-
-
-
-
-
-
-

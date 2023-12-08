@@ -63,7 +63,7 @@ class UserViewTestCase(TestCase):
 
     ### Additional tests below ###
 
-    def test_new_users_page(self):
+    def test_show_new_user_form(self):
         with app.test_client() as c:
             resp = c.get('/users/new')
             html = resp.get_data(as_text=True)
@@ -77,14 +77,37 @@ class UserViewTestCase(TestCase):
                            data={'first_name': 'test2_first',
                                   'last_name': 'test2_last',
                                   'image_url': 'None'}, follow_redirects=True)
-
+            html = resp.get_data(as_text=True)
+            # Change image_url to '' insteaad of None
 
             self.assertEqual(resp.status_code, 200)
-            self.assertEqual('test2_first', User.query.filter(
-                User.first_name == 'test2_first').one().first_name)
+            self.assertEqual(   # Set the query to a variable to help formatting
+                'test2_first',
+                User.query.filter(
+                    User.first_name == 'test2_first'
+                ).one().first_name)
+            self.assertIn('test2_first test2_last', html)
 
 
+    def test_show_edit_form(self):
+        with app.test_client() as c:
+            resp = c.get(f'/users/{self.user_id}/edit')
+            html = resp.get_data(as_text=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("Edit a user", html)
 
+
+    def test_delete_user(self):
+        with app.test_client() as c:
+            resp = c.post(f'/users/{self.user_id}/delete',
+                          data={'id': self.user_id}, follow_redirects=True)
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIsNone(User.query.filter(
+                User.id == self.user_id).one_or_none())
+            self.assertIn('test1_first test1_last has been terminated', html)
+            # (yes, keep the literal string of what was expectecd.)
 
 
 

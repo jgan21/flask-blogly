@@ -4,7 +4,8 @@ print("***** MODELS.PY   ")
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
-DEFAULT_IMAGE_URL = "https://img.freepik.com/premium-vector/3d-realistic-person-people-vector-illustration_156780-246.jpg?w=826"
+DEFAULT_IMAGE_URL = "https://img.freepik.com/premium-vector/"\
+    "3d-realistic-person-people-vector-illustration_156780-246.jpg?w=826"
 
 def connect_db(app):
     """Connect to database."""
@@ -36,9 +37,6 @@ class User(db.Model):
     )
 
     image_url = db.Column(
-        db.String(300),
-        default=DEFAULT_IMAGE_URL
+        db.String(300),            # Might wanna do as text instead
+        default=DEFAULT_IMAGE_URL    # Also needs nullable = false
     )
-
-
-
