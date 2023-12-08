@@ -6,7 +6,7 @@ import os
 from flask import Flask, request, redirect, render_template, flash
 from flask_debugtoolbar import DebugToolbarExtension
 
-from models import db, connect_db, User
+from models import db, connect_db, User, DEFAULT_IMAGE_URL
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
@@ -22,8 +22,7 @@ debug = DebugToolbarExtension(app)
 
 @app.get("/")
 def homepage():
-    """ Show homepage with current list of users. """ # Change docstring
-    # -- we are not actually doing that here. (It's done in list_users())
+    """ Redirecting users to /users page """
 
     return redirect("/users")
 
@@ -31,8 +30,7 @@ def homepage():
 def list_users():
     """ List users' first and last name on the page. """
 
-    users = User.query.all()    # Might be returned unsorted!
-                                # Look into ORDER BY: alphabetical? by recency?
+    users = User.query.order_by('last_name', 'first_name').all()
     return render_template("list.html", users=users)
 
 
@@ -73,24 +71,25 @@ def show_user_info(user_id):
 
 @app.get("/users/<int:user_id>/edit")
 def show_edit_form(user_id):
-    """Show the edit form with user's information in inputs.""" # Nice, explicit
+    """Show the edit form with user's information in inputs."""
 
-    # use get_or_404 for this instead!
-    user = User.query.get(user_id)  # Why is this not erroring for u = 999? TODO
+    user = User.query.get_or_404(user_id)
     return render_template("edit.html", user=user)
 
 
-@app.post("/users/<int:user_id>/edit")   # Needs to 404 for DNE user
+@app.post("/users/<int:user_id>/edit")
 def handle_edit_form(user_id):
     """Retrieve information from inputs, update the database,
     and redirect user back to /users page"""
 
-    user = User.query.get(user_id)
+    user = User.query.get_or_404(user_id)
 
     first_name = request.form['first_name']
     last_name = request.form['last_name']
-    image_url = request.form['image_url'] if request.form['image_url'] else None
-    # Should be equal to the default image string in the "" condition
+    image_url = request.form['image_url']
+
+    if not image_url:
+        image_url = DEFAULT_IMAGE_URL
 
     user.first_name = first_name
     user.last_name = last_name

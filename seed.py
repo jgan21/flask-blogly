@@ -19,7 +19,6 @@ giraffe = User(
 fluffy = User(
     first_name='Fluffy',
     last_name='Burton',
-    image_url='https://imgs.search.brave.com/1BB3_2WnMqvSSAPX5xlHPqGXQuK_Bxea-psX6zerqaE/rs:fit:860:0:[…]W51UTh3alFH/cmFUUlFtRlNZalkt/dldCcndnTm9hVEFG/bDhoeTRBUWM9'
 )
 
 db.session.add(matt)
